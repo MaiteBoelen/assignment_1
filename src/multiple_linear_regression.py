@@ -22,8 +22,10 @@ class MultipleLinearRegression:
         return np.dot(X, self.coefficients)
 
     def get_parameters(self):
-        # This method should return model parameters
-        return {'intercept': self.intercept, 'coefficients': self.coefficients.tolist()}
+        if self.coefficients is not None:
+            return {'intercept': self.intercept, 'coefficients': self.coefficients.tolist()}
+        else:
+            return {'intercept': self.intercept, 'coefficients': None}
 
     def set_parameters(self, params):
         # This method should set model parameters

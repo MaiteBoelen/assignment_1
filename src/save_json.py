@@ -1,21 +1,18 @@
 from multiple_linear_regression import MultipleLinearRegression
 from model_saver import ModelSaver
+import numpy as np
 import json
 
-model = MultipleLinearRegression
-# Create an instance of ModelSaver
+model = MultipleLinearRegression()
+
+# Sample data for training
+X = np.array([[1, 4], [2, 5], [3, 2], [4, 3], [5, 1]])
+y = np.array([0, 1, 2, 3, 4])
+
+# Train the model
+model.train(X, y)
+
+# Now save the model parameters
 saver = ModelSaver(format_type='json')
-
-# Save the model parameters
 saver.save_parameters(model, 'saved_model.json')
-
-# Create a new instance of SimpleModel
-new_model = MultipleLinearRegression()
-
-# Load the model parameters to the new model
-saver.load_parameters(new_model, 'saved_model.json')
-
-# Check if the parameters are successfully loaded
-print("Original Model Parameters -- Intercept:", model.intercept, "Coefficients:", model.coefficients)
-print("Loaded Model Parameters -- Intercept:", new_model.intercept, "Coefficients:", new_model.coefficients)
 

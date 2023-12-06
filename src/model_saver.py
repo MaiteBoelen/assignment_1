@@ -41,21 +41,20 @@ class ModelSaver:
             raise ValueError("Unsupported format.")
 
     def _save_json(self, model, file_path):
-        parameters = model.get_parameters()  # Assume the model has a method to get parameters
+        parameters = model.get_parameters()  
         with open(file_path, 'w') as json_file:
             json.dump(parameters, json_file)
 
     def _load_json(self, model, file_path):
         with open(file_path, 'r') as json_file:
             parameters = json.load(json_file)
-            model.set_parameters(parameters)  # Assume the model has a method to set parameters
-
+            model.set_parameters(parameters)  
     def _save_pickle(self, model, file_path):
-        parameters = model.get_parameters()  # Assume the model has a method to get parameters
+        parameters = model.get_parameters()  
         with open(file_path, 'wb') as pickle_file:
             pickle.dump(parameters, pickle_file)
 
     def _load_pickle(self, model, file_path):
         with open(file_path, 'rb') as pickle_file:
             parameters = pickle.load(pickle_file)
-            model.set_parameters(parameters)  # Assume the model has a method to set parameters
+            model.set_parameters(parameters)  

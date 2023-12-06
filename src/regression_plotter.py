@@ -13,10 +13,11 @@ class RegressionPlotter:
 
         if num_features == 1:
             self._plot_2d_regression()
-        elif num_features == 2:
+        elif num_features == 2 and not plot_all_features:
             self._plot_3d_regression()
-        elif plot_all_features:
+        else:  # This will handle more than two features or when plot_all_features is True
             self._plot_all_features()
+
 
     def _plot_2d_regression(self):
         plt.scatter(self.X[:, 0], self.y, color='blue', label='Data')
@@ -46,26 +47,24 @@ class RegressionPlotter:
 
     def _plot_all_features(self):
         num_features = self.X.shape[1]
-        fig, axs = plt.subplots(1, num_features, figsize=(num_features * 5, 4))
-
         for i in range(num_features):
-            axs[i].scatter(self.X[:, i], self.y, color='blue', label=f'Feature {i+1} vs Target')
-        
-        # Create a grid for the feature being plotted
-            line_x = np.linspace(self.X[:, i].min(), self.X[:, i].max(), 100).reshape(-1, 1)
-
-        # Construct a full feature set with the other features set to their mean values
-            full_feature_set = np.full((100, num_features), np.mean(self.X, axis=0))
-            full_feature_set[:, i] = line_x.ravel()
-
-        # Predict using the full feature set
-            line_y = self.model.predict(full_feature_set)
-
-            axs[i].plot(line_x, line_y, color='red', label='Regression Line')
-            axs[i].set_xlabel(f'Feature {i+1}')
-            axs[i].set_ylabel('Target')
-            axs[i].legend()
-
-        plt.tight_layout()
-        plt.show()
+            plt.figure()
+            plt.scatter(self.X[:, i], self.y, color='blue', label=f'Data Feature {i+1}')
+            
+            # Generate a sequence of values for the current feature
+            line_x = np.linspace(self.X[:, i].min(), self.X[:, i].max(), 100)
+            
+            # Prepare a feature array for predictions. Use the mean values for other features
+            X_temp = np.ones((100, num_features)) * np.mean(self.X, axis=0)
+            X_temp[:, i] = line_x
+            
+            # Make predictions
+            line_y = self.model.predict(X_temp)
+            
+            plt.plot(line_x, line_y, color='red', label='Regression Line')
+            plt.xlabel(f'Feature {i+1}')
+            plt.ylabel('Target')
+            plt.title(f'Regression Line for Feature {i+1}')
+            plt.legend()
+            plt.show()
 

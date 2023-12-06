@@ -1,31 +1,46 @@
-import numpy as np 
+import numpy as np
 
-class MultipleLinearRegressor:
+class MultipleLinearRegression:
     def __init__(self):
         self.intercept = 0
-        self.slope = 0
+        self.coefficients = None
 
-model = MultipleLinearRegressor()
+    def train(self, X, y):
+        # Add a column of ones to X for the intercept term
+        X = np.c_[np.ones(X.shape[0]), X]
 
-def train(self, x, y):
-    x_mean = np.mean(x)
-    y_mean = np.mean(y)
-    slope_numerator = np.sum((x - x_mean) * (y - y_mean))
-    slope_denominator = np.sum((x - x_mean)**2)
-    self.slope = slope_numerator / slope_denominator
-    self.intercept = y_mean - self.slope * x_mean
+        # Calculate coefficients using the normal equation (X^T * X)^-1 * X^T * y
+        X_transpose = np.transpose(X)
+        X_transpose_X_inv = np.linalg.inv(np.dot(X_transpose, X))
+        self.coefficients = np.dot(np.dot(X_transpose_X_inv, X_transpose), y)
 
-def predict(self, x):
+        # Set intercept and coefficients
+        self.intercept = self.coefficients[0]
+        self.slope = self.coefficients[1:]
 
-    return self.slope * x + self.intercept
+    def predict(self, X):
+        # Make sure X is a 2D array
+        if X.ndim == 1:
+            X = X.reshape(-1, 1)
+        # Add a column of ones to X for the intercept term
+        X = np.c_[np.ones(X.shape[0]), X]
+        # Use the learned coefficients to make predictions
+        return np.dot(X, self.coefficients)
+    
 
 if __name__ == "__main__":
-    model = MultipleLinearRegressor()
-    x = np.array([1,2,3,4,5,6])
-    y = np.array([0,1,2,3,4,5])
-    x += np.random.rand(*x.shape)
-    print(f"SimpleLinerRegressor coefficients -- intercept {model.intercept}-- slope {model.slope}")
-    model.train(x, y)
-    y_pred = model.predict(x)
-    print("Ground truth and predicted values:", y, y_pred, sep="\n")
+    model = MultipleLinearRegression()
 
+    # Example dataset with multiple features
+    X = np.array([[1, 4], [2, 5], [3, 2], [4, 3], [5, 1]])
+    y = np.array([0, 1, 2, 3, 4])
+
+    print(f"MultipleLinearRegression coefficients -- intercept {model.intercept} -- coefficients {model.coefficients}")
+    
+    # Train the model
+    model.train(X, y)
+
+    # Make predictions
+    y_pred = model.predict(X)
+
+    print("Ground truth and predicted values:", y, y_pred, sep="\n")

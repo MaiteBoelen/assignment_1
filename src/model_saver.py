@@ -1,5 +1,7 @@
 import json
 import pickle
+from multiple_linear_regression import MultipleLinearRegression
+
 
 class ModelSaver:
     def __init__(self, format_type='json'):

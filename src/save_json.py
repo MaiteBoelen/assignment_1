@@ -7,13 +7,13 @@ model = MultipleLinearRegression
 saver = ModelSaver(format_type='json')
 
 # Save the model parameters
-saver.save_model(model, 'saved_model.json')
+saver.save_parameters(model, 'saved_model.json')
 
 # Create a new instance of SimpleModel
 new_model = MultipleLinearRegression()
 
 # Load the model parameters to the new model
-saver.load_model(new_model, 'saved_model.json')
+saver.load_parameters(new_model, 'saved_model.json')
 
 # Check if the parameters are successfully loaded
 print("Original Model Parameters -- Intercept:", model.intercept, "Coefficients:", model.coefficients)
